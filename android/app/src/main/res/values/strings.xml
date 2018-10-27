@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="account_type">com.testforce.android.login</string>
+	<string name="app_name">testforce</string>
+	<string name="app_package">com.testforce.android</string>
+</resources>
