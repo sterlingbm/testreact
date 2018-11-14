@@ -1,6 +1,8 @@
 import React from "react";
 import { AppRegistry, View, StatusBar } from "react-native";
 import LucyChat from "./LucyChat.js";
+import Nightr from "../app.js";
+import { TabNavigator, StackNavigator } from "react-navigation";
 import { Container, Body, Content, Header, H3, Left, Icon, Right, Title, Input, Item, Label, Button, Text, ListItem, CheckBox, Picker, Form } from "native-base";
 //import HomeScreen from "../HomeScreen";
 
@@ -8,14 +10,20 @@ import { Container, Body, Content, Header, H3, Left, Icon, Right, Title, Input, 
 
 export default class MapFilters extends React.Component {
 
+  
+
 
 
     constructor(props) {
         super(props);
+        
 
         this.state = {
-          mapFilterRange: '75'
+          mapFilterRange: 10000,
+          passFromLucy: this.props.navigation.getParam('passToFilters', 'fuckmyass')
         };
+
+        
       }
       onValueChange(value: string) {
         this.setState({
@@ -26,7 +34,7 @@ export default class MapFilters extends React.Component {
 
   render() {
 
-
+console.log(this.state.passFromLucy);
 
     const { navigate } = this.props.navigation;
     return (
@@ -35,12 +43,17 @@ export default class MapFilters extends React.Component {
     <Left>
     <Button
               transparent
-              onPress={() => navigate("Home")}>
+              onPress={() => {
+              this.props.navigation.state.params.onNavigateBack(this.state.mapFilterRange);
+              navigate('Home', {
+                passMap: this.state.mapFilterRange,
+                });
+                }}>
               <Icon name="arrow-back" />
             </Button>
         </Left>
           <Body>
-            <Title>Map Filters</Title>
+            <Title>Map Filters{this.state.mapFilterRange}</Title>
           </Body>
           <Right>
 

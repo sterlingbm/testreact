@@ -21,7 +21,7 @@ const HomeStack = StackNavigator({
 
 const SettingsStack = StackNavigator({
   Pass: { screen: JadeChat },
-  UserAccount: { screen: UserAccount }
+  UserAccount: { screen: UserAccount },
 },
 
 {

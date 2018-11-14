@@ -40,33 +40,48 @@ const styles = StyleSheet.create({
 
 export default class LucyChat extends React.Component {
 
+  
+
+  handleOnNavigateBack = (passMap) => {
+    this.setState({
+      mapFilterRange: this.props.navigation.getParam('passMap', 'fuckmyass'),
+      
+    })
+    console.log('Pass Map Pass:' + passMap);
+    this.fetchData();
+  }
+
+  
+
     constructor(props) {
       
         super(props);
-        this.props.navigation.setParams({mapFilterRange: '50'});
         console.log(props.navigation.state.params);
         console.log(this.props.navigation.state);
         console.log(this.props);
-        console.log(this.props.navigation.getParam('mapFilterRange', 'fuckmyass'));
+        console.log(this.props.navigation.getParam('passMap', 'fuckmyass'));
         this.state = {
             data: [],
+            isFocused: false,
             isMapReady: false,
             latitude: null,
             longitude: null,
             error: null,
             coords:[],    
-            mapFilterRange: this.props.navigation.getParam('mapFilterRange', 'fuckmyass'),
+            
         };
        
 
     }
 
     componentDidMount() {
-
+      this.subs = [
+        this.props.navigation.addListener("didFocus", () => this.setState({ isFocused: true })),
+        this.props.navigation.addListener("willBlur", () => this.setState({ isFocused: false }))
+      ];
         
 
         var that = this;
-       
         navigator.geolocation.getCurrentPosition(
             (position) => {
               console.log("wokeeey");
@@ -100,9 +115,13 @@ export default class LucyChat extends React.Component {
 
     }
 
+    componentWillUnmount() {
+      this.subs.forEach(sub => sub.remove());
+    }
+
     fetchData() {
         var that = this;
-        var mapMarkerQuery = 'SELECT Id, Name, Type__c, Phone__c, Logo__c, Lat_Long__c, Lat_Long__Latitude__s, Lat_Long__Longitude__s, Mixed_Drink_Prices__c, Monday_Closed__c, Monday_Open__c FROM Location__c WHERE DISTANCE(Lat_Long__c, GEOLOCATION(' + that.state.latitude + ',' + that.state.longitude + '),' +  `'` + 'mi' + `') <` + that.state.mapFilterRange;
+        var mapMarkerQuery = 'SELECT Id, Name, Type__c, Phone__c, Logo__c, Lat_Long__c, Lat_Long__Latitude__s, Lat_Long__Longitude__s, Mixed_Drink_Prices__c, Monday_Closed__c, Monday_Open__c FROM Location__c WHERE DISTANCE(Lat_Long__c, GEOLOCATION(' + that.state.latitude + ',' + that.state.longitude + '),' +  `'` + 'mi' + `') <` + this.state.mapFilterRange;
         console.log(mapMarkerQuery);
         net.query(mapMarkerQuery,
                   (response) => that.setState({data: response.records})
@@ -122,7 +141,11 @@ export default class LucyChat extends React.Component {
           <Right>
             <Button
               transparent
-              onPress={() => navigate("MapFilters")}>
+              onPress={() => { navigate("MapFilters", {
+                passToFilters: 'hello',
+                onNavigateBack: this.handleOnNavigateBack.bind(this),
+              });
+              }}>
               <Icon name="menu" />
             </Button>
           </Right>

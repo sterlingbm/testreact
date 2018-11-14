@@ -1,7 +1,10 @@
 import React from "react";
 import { AppRegistry, View , StatusBar, StyleSheet } from "react-native";
-import stripe from 'tipsi-stripe'
+import stripe from 'tipsi-stripe';
+import Nightr from "../app.js";
+import JadeChat from './JadeChat.js';
 import {oauth, net} from 'react-native-force';
+import { TabNavigator, StackNavigator } from "react-navigation";
 import { Container, Body, Content, Header, H3, Left, Icon, Right, Title, Input, Button,  Item, Label, Text, ListItem, CheckBox, Picker, Form } from "native-base";
 import testID from '../utils/testID'
 //import HomeScreen from "../HomeScreen";
@@ -133,7 +136,7 @@ fetchData(responseSF) {
     <Left>
     <Button
               transparent
-              onPress={() => navigate("Home")}>
+              onPress={() => navigate('Pass')}>
               <Icon name="arrow-back" />
             </Button>
         </Left>
